@@ -4,7 +4,8 @@
   "description": "A little application to re-create dojo",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.10.6"
+    "express": "^4.10.6",
+    "node-compass": "^0.2.3"
   },
   "devDependencies": {},
   "scripts": {
