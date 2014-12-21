@@ -38,19 +38,19 @@
     </div>
     <p>Il s'agit d'un des premiers tutoriaux Dojo, qui résume en quelques lignes de code comment utiliser Dojo proprement et efficacement.</p>
     <code>
-        require([
-            'dojo/dom',
-            'dojo/fx',
-            'dojo/domReady!'
-        ], function (dom, fx) {
-            var greeting = dom.byId('greeting');
-            greeting.innerHTML += ' from Dojo!';        
-            fx.slideTo({
-                node: greeting,
-                top: 100,
-                left: 200
-            }).play();
-        });
+require([
+    'dojo/dom',
+    'dojo/fx',
+    'dojo/domReady!'
+], function (dom, fx) {
+    var greeting = dom.byId('greeting');
+    greeting.innerHTML += ' from Dojo!';        
+    fx.slideTo({
+        node: greeting,
+        top: 100,
+        left: 200
+    }).play();
+});
     </code>
 </body>
 </html>
