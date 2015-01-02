@@ -1,0 +1,25 @@
+<div>
+	<h1>Dojo from scratch: réécrire Dojo pour en comprendre le fonctionnement</h1>
+	<p>L'animation dojo suivante vous rapelle-t-elle quelquechose ?</p>
+	<div style="position:relative;height:150px;">
+	    <h2 id="greeting">Hello</h1>
+	</div>
+	<p>Il s'agit d'un des premiers tutoriaux Dojo, qui résume en quelques lignes de code comment utiliser Dojo proprement et efficacement.</p>
+	<code>
+require([
+    'dojo/dom',
+    'dojo/fx',
+    'dojo/domReady!'
+], function (dom, fx) {
+    var greeting = dom.byId('greeting');
+    greeting.innerHTML += ' from Dojo!';        
+    fx.slideTo({
+        node: greeting,
+        top: 100,
+        left: 200
+    }).play();
+});
+	</code>
+	<p>Par quel miracle ces quelques lignes de code peuvent charger des composants Dojo, manipuler et animer des éléments du DOM ?<br />
+	Comment marche Dojo, quel cheminement prennent les instructions, comment les différents contributeurs de Dojo en ont fait une biblithèque incontournable pour les professionnels ? Comment soit-même contribuer en comprenant ces mécanismes ?<br /><br /> C'est l'objet de ce tutoriel !</p>
+</div>

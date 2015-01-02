@@ -1,6 +1,23 @@
+body {
+	font-family: Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif !important;
+	font-size: 14px !important;
+}
 code { 
 	white-space: pre; 
 }
+.proTip {
+	padding: 1em;
+	padding-left: 35px;
+	border: 1px solid #ececcd;
+	background: #fffff1 url("/images/tip.png") no-repeat 10px 16px;
+}
+.TODO {
+	background-color: orange;
+}
 #greeting { 
 	position: absolute;
+}
+#main p  {
+	color: #333;
+	line-height: 1.5em;
 }

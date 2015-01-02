@@ -1,0 +1,15 @@
+<p>Avec javascript, toutes les variables déclarées en dehors d'une fonction seront des globales utilisables dans tous les scopes.</p>
+
+<div class="proTip">Plus précisément, toute nouvelle variable globale est donnée en propriété à l'objet du browser "window" (toutes les propriétés de window sont des "globales" et toutes les "globales" sont en fait des propriétés de window. ex: window.document, qu'on peut simplement utiliser avec la vrarible globale "document" (document.body, etc.).<br />
+Ainsi, déclarer <code>var dojoConfig = {};</code> est l'équivalent de <code> window.dojoConfig = {};</code> et dojoConfig pourra être utilisé tel quel dans tout le code à suivre et dans toutes les fonctions</div>
+<p>Lorsque l'on charge Dojo sur une page web, nous avons directements accès à quelques globales minimales.<br />
+Depuis sa version 1.7, Dojo se veut "baseless", c'est à dire qu'au démarrage, aucune fonctionnalité n'est vraiment chargée, à l'exeption de celles qui permettent le chargement des autres.</p>
+<p>Ces globales sont :
+    <ul>
+        <li><code>require</code> - résultat du typeof : <code><span id="typeofRequire"></span></code></li>
+        <li><code>define</code> - résultat du typeof : <code><span id="typeofDefine"></span></code></li>
+        <li><code>dojo, dijit, dojox</code> qui servirons de namespace (c'est à dire de conteneurà pour les modules chargés. Notons qu'ils continnent aussi des éléments de rétro-compatibilité avec les versions antérieures à la 1.7, et des éléments de configuration.</code>
+        <li>Eventuellement l'objet <code>dojoConfig</code> si vous l'avez défini en tant que globale avant de charger Dojo, pour configurer Dojo.</li>
+    </ul>
+    <span class="TODO">//TODO: capure d'écran comparative de l'objet window dans la console avec et sans Dojo</span>
+</p>

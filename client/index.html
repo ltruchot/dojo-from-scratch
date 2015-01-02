@@ -3,54 +3,142 @@
 <head>
     <meta charset="utf-8">
     <title>dojo from scratch</title>
-        <!-- load Dojo -->
-    <script src="dojo-src/dojo/dojo.js" data-dojo-config="async: true"></script>
+    <script>
+        this.dojoConfig = {
+            async: true,
+            parseOnLoad: false,
+            tlmSiblingOfDojo: false,
+            baseUrl: "",
+            packages: [
+                { name: "dojo", location: "dojo-src/dojo" },
+                { name: "dijit", location: "dojo-src/dijit" },
+                { name: "dojox", location: "dojo-src/dojox" },
+                { name: "app", location: "app" }
+            ]
+        };
+    </script>
+    <script src="dojo-src/dojo/dojo.js"></script>
     <link rel="stylesheet" href="client/css/main.css" />
     <link rel="stylesheet" href="dojo-src/dojox/highlight/resources/highlight.css" />
     <script>
-        require([
-            'dojo/dom',
-            'dojo/fx',
-            'dojox/highlight',
-            'dojox/highlight/languages/sql',
-            'dojo/query',
-            'dojo/domReady!'
-        ], function (dom, fx, highlight, javascript, query) {
-            // The piece we had before...
-            var greeting = dom.byId('greeting');
-            greeting.innerHTML += ' from Dojo!';
-         
-            // ...but now, with an animation!
-            fx.slideTo({
-                node: greeting,
-                top: 100,
-                left: 200
-            }).play();
 
+        //highlighting "code" tag
+        require([
+            'dojo/query',
+            'dojox/highlight',
+            'dojox/highlight/languages/javascript',            
+            'dojo/domReady!'
+        ], function (dom, query, highlight, javascript)  {
             query("code").forEach(highlight.init);
         });
-</script>
+
+
+
+        require([
+            'dojo/_base/event',
+            'dojo/dom',
+            'dojo/dom-attr',
+            'dojo/dom-construct',
+            'dojo/on',
+            'app/Page',
+            'dojo/text!app/contents/home.html',
+            'dojo/text!app/contents/globales.html',
+            'dojo/domReady!'
+        ],
+        function (dojoEvent, dom, domAttr, domConstruct, on, Page, home) {
+
+            //on click on a nav link
+            on(dom.byId("progressionMenu"), "a:click", function (event){
+                
+                //stop normal click event behavior
+                dojoEvent.stop(event);
+                
+                //get all pages
+                var pages = {
+                    "home": "je suis la page d'acceuil",
+                    "globales": "je suis la page qui parle des globales"
+                };
+                
+                //prepare all data
+                var currentPageName = domAttr.get(this, "href").replace("#", "");
+                var currentPageTitle = this.innerText;
+                var currentPageContent = pages[currentPageName];
+
+                //create the page widget
+                var currentPage = new Page({
+                    pageName: currentPageName,
+                    pageTitle: currentPageTitle,
+                    pageContent: currentPageContent
+                });
+
+                //replace previous page with new page
+                var mainContainer = dom.byId("mainContainer");
+                domConstruct.empty(mainContainer);
+                domConstruct.place(currentPage.domNode, mainContainer);
+            });
+        });
+    </script>
 </head>
 <body>
-    <p>La phrase suivante vous rapelle-t-elle quelquechose ?</p>
-    <div style="position:relative;height:150px;">
-        <h1 id="greeting">Hello</h1>
-    </div>
-    <p>Il s'agit d'un des premiers tutoriaux Dojo, qui résume en quelques lignes de code comment utiliser Dojo proprement et efficacement.</p>
-    <code>
-require([
-    'dojo/dom',
-    'dojo/fx',
-    'dojo/domReady!'
-], function (dom, fx) {
-    var greeting = dom.byId('greeting');
-    greeting.innerHTML += ' from Dojo!';        
-    fx.slideTo({
-        node: greeting,
-        top: 100,
-        left: 200
-    }).play();
-});
-    </code>
+<nav id="progressionMenu">
+    <span>Progression :</span>
+    <ul>
+        <li><a href="#home">Un peu de code simple en Dojo</a></li>
+        <li><a href="#globales">Les globales en Dojo</a></li>
+    </ul>
+</nav>
+<div id="mainContainer">
+
+<h2>Require et Define: les deux méthodes de RequireJS</h2>
+<p>C'est en grande partie sur ces deux composantes que repose la "magie" de Dojo et de sa "modularité". Elles sont fournies par une implémentation de RequireJS native dans Dojo.<br /> Appelée plus communément AMD (pour Asynchronous Module Definition), il s'agit d'une approche récente du JavaScript qui permet plus généralement l'appel de nombreux fichiers JavaScript, à la demande, sans passer par la balise <code><script></script></code></p>
+<p>RequireJS n'est en effet qu'une partie d'un projet plus grand, CommonJS, qu'on retrouve derrière l'émergence d'un JavaScript aussi solide, efficace et lisible que les autres langages (et si possible plus !), même hors du navigateur (Node.js, MongoDB, etc.).<br />
+Ainsi, Dojo a suivit ce mouvement et à évolué avec lui: il intègre cette mécanique de RequireJS et fourni un interface "AMD" au lancement.</p>
+<p>AMD dans un navigateur dans le navigateur se manifeste en gros de la manière suivante :
+<ul>
+    <li>Lorsqu'un chemin (ou plusieurs) vers un fichier JavaScript est appelé dans le code via require
+<code>
+require("dojo/_base/array", 
+function(array){
+
+});</code>
+ici, <code>require</code> vérifie s'il a déjà été chargé (dans la globale <code>dojo._base.array</code>)</li>
+<li>S'il n'existe pas encore, une requete Ajax trouve et parse le fichier pour creer l'objet dans le namespace dojo._base.array</li>
+<li>Une fois l'objet prêt (qu'il soit en cache ou qu'il vienne d'être chargé, il est passé en argument à une callback: une fonction qui s'exécutera à la fin et qui utilisera array.</li>
+</ul>
+exemple :
+<span class="TODO">//TODO: Tester ce code</span>
+<code>
+var callback = function (array) {
+    var days = ["monday", "tuesday", "wednesday"];
+    array.forEach(days, function (day) {
+        console.log(day);
+    });
+};
+require("dojo/_base/array", callback);
+</code>
+C'est donc cette fonction qui est passée en second argument de require. Cependant, on prend généralement soin de la décrire directement dans l'instruction require, pour garder bien en vue l'ordre le nombre de module appelé, et préparer les arguments de la callback en fonction de ces modules.<br />
+Ce qui se passera reelement au moment de cet appel pourrais donc être très grossièrement résumé à cette closure:
+<code>
+function require (module, callback) {
+return (function (Deffered, request, arrayOrPath) {
+
+    //si array existe déjà, nul besoin de le charger !
+    if (typeof array === "object") {
+        callback(array);
+    }
+
+    //sinon, envoyer une requête au serveur sur le fichier
+    else {
+        request("dojo/_base/array").then(function (data) {
+            dojo._base = dojo._base || {};
+            dojo._base.array = dojo.parse(data);
+            callback(dojo._base.array)
+        });
+    }
+})(dojo.Deffered, dojo.request, (dojo._base && dojo._base.array) || "dojo/_base/array", callback);
+}
+</code>
+</p>
+</li>
 </body>
 </html>
